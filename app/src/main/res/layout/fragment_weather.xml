@@ -1,0 +1,129 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="360dp"
+    tools:context="exp.weather.fragments.WeatherFragment">
+
+   <GridLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:columnCount="2">
+
+       <TextView
+           android:id="@+id/cityNameTv"
+           android:layout_width="wrap_content"
+           android:layout_height="40dp"
+           android:layout_column="0"
+           android:layout_row="0"
+           android:layout_marginLeft="50dp"
+           android:layout_marginTop="20dp"
+           android:textSize="20sp"
+           android:textColor="@color/colorAccent"
+           />
+
+       <TextView
+           android:id="@+id/tempTv"
+           android:layout_width="100dp"
+           android:layout_height="60dp"
+           android:layout_column="0"
+           android:layout_row="0"
+           android:layout_marginLeft="50dp"
+           android:layout_marginTop="80dp"
+           android:textSize="50sp"/>
+
+       <ImageView
+           android:id="@+id/scyImg"
+           android:layout_column="1"
+           android:layout_row="0"
+           android:layout_marginRight="40dp"
+           android:layout_marginTop="30dp"
+           android:layout_gravity="center|right"
+           />
+
+       <!--row #1 -->
+
+       <GridLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:columnCount="2"
+           android:layout_column="0"
+           android:layout_row="1"
+           android:layout_marginTop="10dp"
+           android:layout_marginLeft="20dp"
+           >
+
+           <ImageView
+               android:id="@+id/windIv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_column="0"
+               android:layout_row="0"
+               android:layout_marginLeft="20dp"
+               android:layout_marginTop="20dp"
+               android:src="@drawable/wind"
+               />
+
+           <TextView
+               android:id="@+id/windTv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_column="1"
+               android:layout_row="0"
+               android:layout_marginLeft="20dp"
+               android:layout_marginTop="20dp"
+               />
+
+           <ImageView
+               android:id="@+id/pressureIv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_column="0"
+               android:layout_row="1"
+               android:layout_marginLeft="20dp"
+               android:layout_marginTop="20dp"
+               android:src="@drawable/pressure"
+               />
+
+           <TextView
+               android:id="@+id/pressureTv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_column="1"
+               android:layout_row="1"
+               android:layout_marginLeft="20dp"
+               android:layout_marginTop="20dp"
+               />
+
+
+           <ImageView
+               android:id="@+id/humidityIv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_column="0"
+               android:layout_row="2"
+               android:layout_marginLeft="20dp"
+               android:layout_marginTop="20dp"
+               android:src="@drawable/humidity"
+               />
+
+           <TextView
+               android:id="@+id/humidityTv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_column="1"
+               android:layout_row="2"
+               android:layout_marginLeft="20dp"
+               android:layout_marginTop="20dp"
+               />
+       </GridLayout>
+   </GridLayout>
+
+    <Button
+        android:id="@+id/getDaysBtn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_selector"
+        android:layout_gravity="center|bottom"
+        android:text="@string/fiveDaysBtn"
+        />
+</FrameLayout>
