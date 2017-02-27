@@ -1,14 +1,17 @@
 package exp.weather.presenters;
 
 import javax.inject.Inject;
+
+import exp.weather.common.BaseFragmentPresenter;
 import exp.weather.data.CurrentWeatherDBSource;
+import exp.weather.interfaces.IWeatherView;
 import exp.weather.network.CurrentPOJO.CurrentWeather;
 import exp.weather.interfaces.MainScreenContract;
 import exp.weather.activities.MainActivity;
 
-public class WeatherPresenter {
+public class WeatherPresenter implements BaseFragmentPresenter<IWeatherView>{
 
-    MainScreenContract.WeatherView weatherView;
+    IWeatherView weatherView;
     MainActivity mainActivity;
     CurrentWeatherDBSource currentWeatherDBSource;
 
@@ -19,15 +22,16 @@ public class WeatherPresenter {
         this.currentWeatherDBSource = currentWeatherDBSource;
     }
 
-    public void attachView(MainScreenContract.WeatherView weatherView) {
-        this.weatherView = weatherView;
-    }
-
     public void writeCurrentWeatherToDB(CurrentWeather currentWeather) {
         currentWeatherDBSource.writeCurrentWeatherData(currentWeather);
     }
 
     public void openSecondActivity() {
         mainActivity.openSecondActivity();
+    }
+
+    @Override
+    public void init(IWeatherView view) {
+        weatherView = view;
     }
 }

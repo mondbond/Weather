@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import javax.inject.Inject;
 import exp.weather.R;
+import exp.weather.common.BaseFragment;
+import exp.weather.interfaces.ISearchView;
 import exp.weather.interfaces.MainScreenComponent;
 import exp.weather.interfaces.MainScreenContract;
 import exp.weather.presenters.MainScreenPresenter;
@@ -18,11 +20,7 @@ import exp.weather.presenters.MainScreenPresenter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchFragment extends Fragment implements MainScreenContract.WeatherView {
-
-    public static MainScreenComponent sComponent;
-
-    private final String CITY_NAME = "cityName";
+public class SearchFragment extends BaseFragment implements ISearchView {
 
     @Inject
     MainScreenPresenter presenter;
@@ -50,26 +48,18 @@ public class SearchFragment extends Fragment implements MainScreenContract.Weath
             }
         });
 
-        if(savedInstanceState != null) {
-            cityNameEt.setText(savedInstanceState.getString(CITY_NAME));
-        }
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.getComponent(MainScreenComponent.class).inject(this);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(CITY_NAME, cityNameEt.getText().toString());
-    }
-
-    public void setComponent(MainScreenComponent mS) {
-        sComponent = mS;
-        sComponent.inject(this);
-    }
-
-    @Override
-    public void setCurrentWeatherDataFromDb(Cursor cursor) {
-
     }
 
     public String getCityName()

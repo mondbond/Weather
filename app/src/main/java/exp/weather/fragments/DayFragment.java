@@ -46,19 +46,19 @@ public class DayFragment extends Fragment {
         redrawGraph(tempList);
     }
 
-    public ArrayList<Float> getChoosenDayTemp(Date chosenDate)
-    {
+    public ArrayList<Float> getChoosenDayTemp(Date chosenDate) {
         ArrayList<Float> tempList = new ArrayList<Float>();
 
         DateFormat dateFormat = new SimpleDateFormat("MMMM.dd", Locale.getDefault());
         String chosenDateFormatted = dateFormat.format(chosenDate);
 
         java.util.List<exp.weather.network.ForecastPOJO.List> weatherList = mForecastWeather.getList();
-        Iterator<List> iterator = weatherList.iterator();
+//        Iterator<List> iterator = weatherList.iterator();
 
-        while (iterator.hasNext()) {
+//        while (iterator.hasNext()) {
 
-            List list = iterator.next();
+        for (List list : weatherList){
+//            List list = iterator.next();
             long timeSTamp = list.getDt();
             Date forecastDate = new Date(timeSTamp * 1000);
             DateFormat dateForecastFormat = new SimpleDateFormat("MMMM.dd", Locale.getDefault());

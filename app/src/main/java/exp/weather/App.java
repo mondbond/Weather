@@ -1,6 +1,7 @@
 package exp.weather;
 
 import android.app.Application;
+import android.content.Context;
 
 public class App extends Application {
 
@@ -10,10 +11,7 @@ public class App extends Application {
     public void onCreate()
     {
         super.onCreate();
-
-        appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .build();
+        buildGraphAndInject();
     }
 
     public static AppComponent getAppComponent()
@@ -21,4 +19,14 @@ public class App extends Application {
         return appComponent;
     }
 
+    public static App get(Context context) {
+        return (App) context.getApplicationContext();
+    }
+
+    public void buildGraphAndInject() {
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .build();
+        appComponent.inject(this);
+    }
 }

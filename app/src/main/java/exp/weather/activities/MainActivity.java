@@ -7,16 +7,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-
 import javax.inject.Inject;
 import exp.weather.App;
+import exp.weather.AppComponent;
 import exp.weather.R;
+import exp.weather.common.BaseActivity;
+import exp.weather.common.IHasComponent;
 import exp.weather.interfaces.DaggerMainScreenComponent;
 import exp.weather.network.CurrentPOJO.CurrentWeather;
 import exp.weather.network.ForecastPOJO.ForecastWeather;
@@ -28,9 +28,9 @@ import exp.weather.presenters.MainScreenPresenter;
 import exp.weather.fragments.SearchFragment;
 import exp.weather.fragments.WeatherFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements IHasComponent {
 
-    public static MainScreenComponent sComponent;
+    private MainScreenComponent mMainScreenComponent;
 
     private SearchFragment mSearchFragment;
     private WeatherFragment mWeatherFragment;
@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
             ft.commit();
         }
 
-
-
         if (isLargeDevice) {
                 mDayFragment = new DayFragment();
                 mForecastFragment = new ForecastFragment();
@@ -99,15 +97,16 @@ public class MainActivity extends AppCompatActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
 
-        sComponent = DaggerMainScreenComponent.builder()
-                .appComponent(((App) getApplicationContext()).getAppComponent())
-                .mainScreenModule(new MainScreenModule(this, mSearchFragment))
+    @Override
+    protected void setupComponent(AppComponent appComponent) {
+        mMainScreenComponent = DaggerMainScreenComponent.builder()
+                .appComponent(appComponent)
+                .mainScreenModule(new MainScreenModule(this))
                 .build();
 
-        sComponent.inject(this);
-        mSearchFragment.setComponent(sComponent);
-        mWeatherFragment.setComponent(sComponent);
+        mMainScreenComponent.inject(this);
     }
 
     public void setCurrentWeather(CurrentWeather currentWeather) {
@@ -124,11 +123,9 @@ public class MainActivity extends AppCompatActivity {
     {
         if(mForecastWeather != null && mCurrentWeather != null)
         {
-            mWeatherFragment.setLarge(isLargeDevice);
             mWeatherFragment.startFragment(mCurrentWeather);
             if(isLargeDevice) {
                 mDayFragment.setForecastWeather(mForecastWeather);
-                mForecastFragment.setLarge(true);
                 mForecastFragment.startFragment(mForecastWeather);
             }
         }
@@ -159,5 +156,10 @@ public class MainActivity extends AppCompatActivity {
     {
         loadingCircle.setAnimation(null);
         loadingCircle.setVisibility(View.GONE);
+    }
+
+    @Override
+    public Object getComponent() {
+        return mMainScreenComponent;
     }
 }

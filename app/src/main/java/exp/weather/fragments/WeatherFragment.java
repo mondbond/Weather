@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import javax.inject.Inject;
 import exp.weather.R;
+import exp.weather.common.BaseFragment;
+import exp.weather.interfaces.IWeatherView;
 import exp.weather.network.CurrentPOJO.CurrentWeather;
 import exp.weather.network.ForecastPOJO.ForecastWeather;
 import exp.weather.interfaces.MainScreenComponent;
@@ -21,7 +24,7 @@ import exp.weather.util.Utility;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WeatherFragment extends Fragment implements MainScreenContract.WeatherView {
+public class WeatherFragment extends BaseFragment implements IWeatherView {
 
     ImageView skyIv;
     TextView tempTv;
@@ -33,8 +36,6 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
 
     @Inject
     WeatherPresenter presenter;
-
-    MainScreenComponent component;
 
     private boolean isLarge;
 
@@ -50,6 +51,11 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_weather, container, false);
+
+        FrameLayout forecastFragmentContainer = (FrameLayout) v.findViewById(R.id.forecastFragmentContainer);
+        if(forecastFragmentContainer != null) {
+            isLarge = true;
+        }
 
         skyIv = (ImageView) v.findViewById(R.id.scyImg);
         tempTv = (TextView) v.findViewById(R.id.tempTv);
@@ -68,6 +74,10 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
             }
         });
 
+        if(isLarge) {
+            getDaysBtn.setVisibility(View.INVISIBLE);
+        }
+
         if(savedInstanceState != null) {
             mSavedInstantState = savedInstanceState;
             mCurrentWeather = savedInstanceState.getParcelable(CURRENT_WEATHER);
@@ -75,7 +85,6 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
             mForecastWeather = savedInstanceState.getParcelable(FORECAST_WEATHER);
         }
 
-        presenter.attachView(this);
         return  v;
     }
 
@@ -86,6 +95,18 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
         {
             getView().setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.init(this);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.getComponent(MainScreenComponent.class).inject(this);
     }
 
     public void setCurrentWeather(CurrentWeather currentWeather) {
@@ -111,21 +132,13 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
 
     public void startFragment(CurrentWeather currentWeather) {
 
-        if(isLarge) {
-            getDaysBtn.setVisibility(View.INVISIBLE);
-        }
-
         this.mCurrentWeather = currentWeather;
         getView().setVisibility(View.VISIBLE);
         setCurrentWeather(mCurrentWeather);
     }
 
-    public void setLarge(boolean large) {
-        isLarge = large;
-    }
-
-    public void setCurrentWeatherDataFromDb(Cursor cursor)
-    {
+    @Override
+    public void setCurrentWeatherDataFromDb(Cursor cursor) {
         getView().setVisibility(View.VISIBLE);
 
         if(cursor.moveToFirst()) {
@@ -140,11 +153,6 @@ public class WeatherFragment extends Fragment implements MainScreenContract.Weat
 
             Utility.setSkyImage(skyIv, sky);
         }
-    }
-
-    public void setComponent(MainScreenComponent mS) {
-        component = mS;
-        component.inject(this);
     }
 
     @Override

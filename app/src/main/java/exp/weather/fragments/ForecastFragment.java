@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
 import javax.inject.Inject;
 import exp.weather.App;
 import exp.weather.R;
@@ -54,6 +56,11 @@ public class ForecastFragment extends Fragment implements ForecastScreenContract
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        FrameLayout forecastFragmentContainer = (FrameLayout) v.findViewById(R.id.forecastFragmentContainer);
+        if(forecastFragmentContainer != null) {
+            isLarge = true;
+        }
+
         if(savedInstanceState != null) {
             mRecyclerView.setAdapter(new ForecastAdapter(
                     (ForecastWeather) savedInstanceState.getParcelable(FORECAST_WEATHER), getActivity()));
@@ -67,8 +74,7 @@ public class ForecastFragment extends Fragment implements ForecastScreenContract
         return v;
     }
 
-        public void drawRecyclerView(ForecastWeather forecastWeather)
-        {
+        public void drawRecyclerView(ForecastWeather forecastWeather) {
         ForecastWeather forecastWeatherPerDay = Utility.getForecastPerDay(forecastWeather);
         mAdapter = new ForecastAdapter(forecastWeatherPerDay, getActivity());
         mRecyclerView.setAdapter(mAdapter);

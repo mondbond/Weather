@@ -18,10 +18,13 @@ import exp.weather.network.ForecastPOJO.List;
 
 public class Utility {
 
-    public static void changeTempColor(TextView temp, Context context)
-    {
-        if(temp.getText() != null)
-        {
+    static final String SKY_STATE_CLEAR = "clear";
+    static final String SKY_STATE_RAIN = "rain";
+    static final String SKY_STATE_SNOW = "snow";
+    static final String SKY_STATE_CLOUDS = "clouds";
+
+    public static void changeTempColor(TextView temp, Context context) {
+        if(temp.getText() != null) {
             double temperature = Double.parseDouble(temp.getText().toString());
             if (temperature <= -15) {
                 temp.setTextColor(context.getResources().getColor(R.color.colorTempDarkBlue));
@@ -44,8 +47,7 @@ public class Utility {
         }
     }
 
-    public static boolean isOnline(Context context)
-    {
+    public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
@@ -54,28 +56,25 @@ public class Utility {
         return false;
     }
 
-    public static void setSkyImage(ImageView skyIv, String sky)
-    {
-        switch (sky.toLowerCase())
-        {
-            case "rain":
+    public static void setSkyImage(ImageView skyIv, String sky) {
+        switch (sky.toLowerCase()) {
+            case SKY_STATE_RAIN:
                 skyIv.setImageResource(R.drawable.rain);
                 break;
-            case "clear":
+            case SKY_STATE_CLEAR:
                 skyIv.setImageResource(R.drawable.clear);
                 break;
-            case "clouds":
+            case SKY_STATE_CLOUDS:
                 skyIv.setImageResource(R.drawable.cloud);
                 break;
-            case "snow":
+            case SKY_STATE_SNOW:
                 skyIv.setImageResource(R.drawable.snow);
                 break;
             default:
         }
     }
 
-    public static ForecastWeather getForecastPerDay(ForecastWeather forecastWeather)
-    {
+    public static ForecastWeather getForecastPerDay(ForecastWeather forecastWeather) {
         ForecastWeather result = new ForecastWeather();
         java.util.ArrayList<List> totalList = new ArrayList<List>();
 

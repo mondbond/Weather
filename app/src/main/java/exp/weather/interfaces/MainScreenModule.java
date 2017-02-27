@@ -15,15 +15,13 @@ public class MainScreenModule {
 
     private MainActivity activity;
 
-    private MainScreenContract.WeatherView weatherView;
 
-    @Inject
-    MainScreenPresenter presenter;
+//    @Inject
+//    MainScreenPresenter presenter;
 
-    public MainScreenModule (MainActivity activity, MainScreenContract.WeatherView weatherView)
+    public MainScreenModule (MainActivity activity)
     {
         this.activity = activity;
-        this.weatherView = weatherView;
     }
 
     @Provides
@@ -31,11 +29,6 @@ public class MainScreenModule {
         return activity;
     }
 
-    @Provides
-    MainScreenContract.WeatherView providesMainScreenContractView()
-    {
-        return weatherView;
-    }
 //
 //    @Provides
 //    Retrofit providesRetrofit()

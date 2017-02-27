@@ -9,4 +9,5 @@ import retrofit2.Retrofit;
 public interface AppComponent {
     public Retrofit getRetrofit();
     public DBHelper getDBHelper();
+    void inject (App app);
 }
