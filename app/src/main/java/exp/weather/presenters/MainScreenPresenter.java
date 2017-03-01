@@ -41,7 +41,7 @@ public class MainScreenPresenter implements LoaderManager.LoaderCallbacks<Cursor
 
     public void makeWeatherRequest(String cityName) {
 
-        if(!Utility.isOnline(mainActivity)) {
+        if(Utility.isOnline(mainActivity)) {
 
             currentWeatherDBSource.clearCurrentWeatherDB();
 
