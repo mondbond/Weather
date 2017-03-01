@@ -2,6 +2,7 @@ package exp.weather.interfaces;
 
 import dagger.Component;
 import exp.weather.AppComponent;
+import exp.weather.activities.ForecastActivity;
 import exp.weather.fragments.ForecastFragment;
 
 /**
@@ -12,4 +13,5 @@ import exp.weather.fragments.ForecastFragment;
 public interface ForecastComponent {
 
     void inject(ForecastFragment forecastFragment);
+    void inject(ForecastActivity forecastActivity);
 }

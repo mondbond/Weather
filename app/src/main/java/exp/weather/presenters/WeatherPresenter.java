@@ -6,7 +6,6 @@ import exp.weather.common.BaseFragmentPresenter;
 import exp.weather.data.CurrentWeatherDBSource;
 import exp.weather.interfaces.IWeatherView;
 import exp.weather.network.CurrentPOJO.CurrentWeather;
-import exp.weather.interfaces.MainScreenContract;
 import exp.weather.activities.MainActivity;
 
 public class WeatherPresenter implements BaseFragmentPresenter<IWeatherView>{

@@ -12,7 +12,9 @@ import android.widget.FrameLayout;
 import javax.inject.Inject;
 import exp.weather.App;
 import exp.weather.R;
-import exp.weather.interfaces.DaggerForecastComponent;
+import exp.weather.common.BaseFragment;
+import exp.weather.interfaces.IForecastView;
+import exp.weather.interfaces.MainScreenComponent;
 import exp.weather.network.ForecastPOJO.ForecastWeather;
 import exp.weather.interfaces.ForecastComponent;
 import exp.weather.interfaces.ForecastModule;
@@ -24,10 +26,9 @@ import exp.weather.util.Utility;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ForecastFragment extends Fragment implements ForecastScreenContract.View {
+public class ForecastFragment extends BaseFragment implements IForecastView {
 
     private final String FORECAST_WEATHER = "forecastWeather";
-    private ForecastComponent mComponent;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -40,12 +41,7 @@ public class ForecastFragment extends Fragment implements ForecastScreenContract
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mComponent = DaggerForecastComponent.builder()
-                .appComponent(((App) getActivity().getApplicationContext()).getAppComponent())
-                .forecastModule(new ForecastModule(this))
-                .build();
 
-        mComponent.inject(this);
     }
 
     @Override
@@ -66,15 +62,22 @@ public class ForecastFragment extends Fragment implements ForecastScreenContract
                     (ForecastWeather) savedInstanceState.getParcelable(FORECAST_WEATHER), getActivity()));
         }else
         {
-            if(mForecastWeather != null) {
-                drawRecyclerView(mForecastWeather);
-            }
+
         }
 
         return v;
     }
 
-        public void drawRecyclerView(ForecastWeather forecastWeather) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.init(this);
+        if(mForecastWeather != null) {
+        drawRecyclerView(mForecastWeather);
+        }
+    }
+
+    public void drawRecyclerView(ForecastWeather forecastWeather) {
         ForecastWeather forecastWeatherPerDay = Utility.getForecastPerDay(forecastWeather);
         mAdapter = new ForecastAdapter(forecastWeatherPerDay, getActivity());
         mRecyclerView.setAdapter(mAdapter);
@@ -89,8 +92,10 @@ public class ForecastFragment extends Fragment implements ForecastScreenContract
         }
     }
 
-    public void setLarge(boolean large) {
-        isLarge = large;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.getComponent(ForecastComponent.class).inject(this);
     }
 
     @Override

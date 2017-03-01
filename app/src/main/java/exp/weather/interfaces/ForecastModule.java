@@ -8,17 +8,9 @@ import dagger.Provides;
  */
 @Module
 public class ForecastModule {
-    private ForecastScreenContract.View view;
 
 
-    public ForecastModule(ForecastScreenContract.View view)
+    public ForecastModule()
     {
-        this.view = view;
-    }
-
-    @Provides
-    ForecastScreenContract.View providesForecastScreenContractView()
-    {
-        return view;
     }
 }

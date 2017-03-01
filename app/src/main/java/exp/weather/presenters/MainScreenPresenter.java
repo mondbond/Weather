@@ -1,8 +1,13 @@
 package exp.weather.presenters;
 
+import android.content.Context;
+import android.support.v4.content.CursorLoader;
 import android.database.Cursor;
-import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.widget.Toast;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import exp.weather.data.CurrentWeatherDBSource;
 import exp.weather.network.CurrentPOJO.CurrentWeather;
@@ -13,7 +18,7 @@ import exp.weather.network.OpenWeatherClient;
 import exp.weather.util.Utility;
 import retrofit2.Retrofit;
 
-public class MainScreenPresenter {
+public class MainScreenPresenter implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Inject
     Retrofit retrofit;
@@ -36,7 +41,7 @@ public class MainScreenPresenter {
 
     public void makeWeatherRequest(String cityName) {
 
-        if(Utility.isOnline(mainActivity)) {
+        if(!Utility.isOnline(mainActivity)) {
 
             currentWeatherDBSource.clearCurrentWeatherDB();
 
@@ -49,15 +54,27 @@ public class MainScreenPresenter {
         }
         else {
             Toast.makeText(mainActivity, "NO INTERNET CONNECTION", Toast.LENGTH_LONG).show();
-            AsyncDBRequest asyncDBRequest = new AsyncDBRequest();
-            asyncDBRequest.execute();
+            mainActivity.getSupportLoaderManager().initLoader(0, null, this);
+            mainActivity.getSupportLoaderManager().getLoader(0).forceLoad();
+            startLoadingAnimation();
         }
     }
 
-    public Cursor getLastResults()
-    {
-        Cursor cursor = currentWeatherDBSource.getLastCurrentWeatherData();
-        return cursor;
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        return new DbLoader(mainActivity, currentWeatherDBSource);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        setCurrentWeatherFromDB(data);
+        stopLoadingAnimation();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     private class ClientCallback implements OpenWeatherClient.ClientCallback
@@ -74,32 +91,24 @@ public class MainScreenPresenter {
         }
     }
 
-    public class AsyncDBRequest extends AsyncTask
-    {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            startLoadingAnimation();
+    static public class DbLoader extends CursorLoader {
+
+        CurrentWeatherDBSource currentWeatherDBSource;
+
+        public DbLoader(Context context, CurrentWeatherDBSource currentWeatherDBSource) {
+            super(context);
+            this.currentWeatherDBSource = currentWeatherDBSource;
         }
 
         @Override
-        protected Cursor doInBackground(Object[] objects) {
-
-        // imitate work for showing animation
+        public Cursor loadInBackground() {
+            Cursor cursor = currentWeatherDBSource.getLastCurrentWeatherData();
             try {
-                Thread.sleep(2000);
-            }catch (InterruptedException e){}
-
-
-            Cursor cursor = getLastResults();
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+         }
             return cursor;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            setCurrentWeatherFromDB((Cursor) o);
-            stopLoadingAnimation();
         }
     }
 

@@ -14,7 +14,6 @@ import exp.weather.R;
 import exp.weather.common.BaseFragment;
 import exp.weather.interfaces.ISearchView;
 import exp.weather.interfaces.MainScreenComponent;
-import exp.weather.interfaces.MainScreenContract;
 import exp.weather.presenters.MainScreenPresenter;
 
 /**

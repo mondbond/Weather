@@ -6,23 +6,23 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.inject.Inject;
+
+import exp.weather.common.BaseFragmentPresenter;
 import exp.weather.data.DBHelper;
+import exp.weather.interfaces.IForecastView;
 import exp.weather.network.ForecastPOJO.ForecastWeather;
 import exp.weather.network.ForecastPOJO.List;
 import exp.weather.interfaces.ForecastScreenContract;
 
-public class ForecastPresenter implements ForecastScreenContract.Presenter {
+public class ForecastPresenter implements BaseFragmentPresenter<IForecastView> {
 
-    private ForecastScreenContract.View view;
+    private IForecastView view;
 
     @Inject
     DBHelper dbHelper;
 
     @Inject
-    public ForecastPresenter(ForecastScreenContract.View view)
-    {
-        this.view = view;
-    }
+    public ForecastPresenter() {}
 
     public void writeForecastWeatherToDB(ForecastWeather forecastWeather)
     {
@@ -49,5 +49,10 @@ public class ForecastPresenter implements ForecastScreenContract.Presenter {
 
             db.insert(DBHelper.TABLE_NAME_FORECAST, null, cv);
         }
+    }
+
+    @Override
+    public void init(IForecastView view) {
+        this.view = view;
     }
 }

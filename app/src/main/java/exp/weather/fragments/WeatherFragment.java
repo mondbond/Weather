@@ -17,7 +17,6 @@ import exp.weather.interfaces.IWeatherView;
 import exp.weather.network.CurrentPOJO.CurrentWeather;
 import exp.weather.network.ForecastPOJO.ForecastWeather;
 import exp.weather.interfaces.MainScreenComponent;
-import exp.weather.interfaces.MainScreenContract;
 import exp.weather.presenters.WeatherPresenter;
 import exp.weather.util.Utility;
 

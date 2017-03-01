@@ -28,7 +28,7 @@ import exp.weather.presenters.MainScreenPresenter;
 import exp.weather.fragments.SearchFragment;
 import exp.weather.fragments.WeatherFragment;
 
-public class MainActivity extends BaseActivity implements IHasComponent {
+public class MainActivity extends BaseActivity implements IHasComponent<MainScreenComponent> {
 
     private MainScreenComponent mMainScreenComponent;
 
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity implements IHasComponent {
     }
 
     @Override
-    public Object getComponent() {
+    public MainScreenComponent getComponent() {
         return mMainScreenComponent;
     }
 }
